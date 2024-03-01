@@ -1,0 +1,18 @@
+{
+	"id": 0,
+	"winner": "alex",
+	"player2": "kwinten",
+	"player3": "lucas",
+	"player4": "lorin",
+	"winningDeck": "political agro",
+	"deck2": "mill",
+	"deck3": "poison",
+	"deck4": "burn",
+	"winningDeckCommander": "Isshin",
+	"deck2Commander": "Smeagol",
+	"deck3Commander": "Atraxa",
+	"deck4Commander": "Ojer",
+	"durationMinutes": 10,
+	"description": "nice game",
+	"createdAt": "2024-02-29T06:46:40.688Z"
+  }
