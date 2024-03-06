@@ -27,4 +27,4 @@ COPY --from=build /app/out .
 EXPOSE 80
 
 # Run the application
-ENTRYPOINT ["dotnet", "MtgServer.dll"]
+ENTRYPOINT ["dotnet", "bin/Release/net8.0/MtgServer.dll"]
