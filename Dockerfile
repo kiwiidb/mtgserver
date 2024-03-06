@@ -1,27 +1,30 @@
-# Adjust DOTNET_OS_VERSION as desired
-ARG DOTNET_OS_VERSION="-alpine"
-ARG DOTNET_SDK_VERSION=8.0
+# Use the official .NET SDK image as a base image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_SDK_VERSION}${DOTNET_OS_VERSION} AS build
-WORKDIR /src
-
-# copy everything
-COPY . ./
-# restore as distinct layers
-RUN dotnet restore
-# build and publish a release
-RUN dotnet publish -c Release -o /app
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_SDK_VERSION}
-ENV ASPNETCORE_URLS http://+:8080
-ENV ASPNETCORE_ENVIRONMENT Production
-EXPOSE 8080
+# Set the working directory in the container
 WORKDIR /app
-COPY --from=build /app .
 
-# or for debian/ubuntu-based images
-RUN apt-get update -y && apt-get install -y ca-certificates fuse3 sqlite3
-COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
+# Copy the project files to the working directory
+COPY *.csproj ./
+RUN dotnet restore
 
-ENTRYPOINT [ "litefs", "mount" ]
+# Copy the remaining source code to the working directory
+COPY . .
+
+# Build the application
+RUN dotnet publish -c Release -o out
+
+# Use the official ASP.NET Core runtime image as a base image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the built application from the build stage
+COPY --from=build /app/out .
+
+# Expose the port the app runs on
+EXPOSE 80
+
+# Run the application
+ENTRYPOINT ["dotnet", "MtgServer.dll"]
