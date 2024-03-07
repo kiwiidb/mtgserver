@@ -23,9 +23,11 @@ WORKDIR /app
 # Copy the built application from the build stage
 COPY --from=build /app/out .
 
+COPY entrypoint.sh /app
 # Expose the port the app runs on
 EXPOSE 80
 
 VOLUME [ "/data" ]
+ENV PATH="${PATH}:/root/.dotnet/tools"
 # Run the application
 ENTRYPOINT ["sh", "/app/entrypoint.sh"]

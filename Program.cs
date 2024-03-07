@@ -19,7 +19,20 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<Db>();
+        dbContext.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        // Handle error
+        Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+    }
+}
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
