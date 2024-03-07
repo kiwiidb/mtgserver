@@ -26,5 +26,6 @@ COPY --from=build /app/out .
 # Expose the port the app runs on
 EXPOSE 80
 
+VOLUME [ "/data" ]
 # Run the application
-ENTRYPOINT ["dotnet", "/app/MtgServer.dll"]
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
