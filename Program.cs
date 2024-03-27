@@ -74,6 +74,7 @@ app.MapGet("/ranking", (Db db) => {
 	foreach (var p in players) {
 		res.Add(new Ranking(){
 			Name = p.Name,
+			ProfileImageUrl = p.ProfileImageUrl,
 			Wins = 0,
 		});
 	}
